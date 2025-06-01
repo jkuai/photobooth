@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            /* fonts */
+            @font-face {
+                font-family: 'Alice Smile';
+                src: url('fonts/Alice Smile.ttf') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'Cotton Cloud';
+                src: url('fonts/Cotton Cloud.ttf') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'Dogica';
+                src: url('fonts/dogicapixel.ttf') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'Cute Notes';
+                src: url('fonts/Cute Notes.ttf') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            /* other design features*/
+            body {
+                background-color: #F7EDE2;
+                background-repeat: no-repeat;
+                background-size: cover;
+                text-align: center;
+            }
+
+            h1 {
+                font-family: 'Alice Smile';
+                font-size: 50px;
+                color: #84A59D;
+                margin-bottom: -15px;
+            }
+
+            h2 {
+                font-family: 'Cotton Cloud';
+                font-size: 60px;
+                color: #84A59D;
+                margin-top: 0px;
+                margin-bottom: 20px;
+            }
+
+            h3 {
+                font-family: 'Dogica';
+                font-size: 15px;
+                color: #808080;
+                margin-bottom: 30px;
+            }
+
+            #finalStripPreview {
+                width: 200px;
+                height: auto;
+                margin-top: 20px;
+            }
+        </style>
+        <script>
+            function buildPhotoStrip() {
+                const canvas = document.getElementById('finalCanvas');
+                const ctx = canvas.getContext('2d');
+
+                const selectedFrame = localStorage.getItem('selectedFrame');
+                if (!selectedFrame) {
+                alert("Missing frame image. Please take your photos again.");
+                return;
+                }
+
+                // Wait for frame image to load first
+                frameImage.onload = () => {
+                    const photos = [];
+                    for (let i = 0; i < 4; i++) {
+                        const img = new Image();
+                        img.src = localStorage.getItem('photo' + i);
+                        photos.push(img);
+                    }
+
+                    // Now wait for all photos to load
+                    Promise.all(photos.map(img => new Promise(res => img.onload = res)))
+                        .then(() => {
+                            for (let i = 0; i < 4; i++) {
+                                ctx.drawImage(photos[i], 0, i * 459, 600, 450);
+                            }
+
+                            ctx.drawImage(frameImage, 0, 0, 600, 1800);
+
+                            const finalURL = canvas.toDataURL('image/png');
+                            const preview = document.getElementById('finalStripPreview');
+                            const downloadLink = document.getElementById('downloadLink');
+
+                            preview.src = finalURL;
+                            preview.onload = () => {
+                                preview.style.display = 'block';
+                                downloadLink.href = finalURL;
+
+                                localStorage.clear();
+                            };
+                        });
+                };
+            }
+
+            window.onload = buildPhotoStrip;
+        </script>
+    </head>
+    <body>
+        <h3>thank you for using this</h3>
+        <h1>photo</h1>
+        <h2>booth</h2>
+
+        <h3>here are your photos ᡣ𐭩 •｡ꪆৎ ˚</h3>
+
+        <img id="finalStripPreview" style="display: none;" />
+        <canvas id="finalCanvas" width="600" height="1800" style="display: none;"></canvas>
+
+        <a id="downloadLink" download="photostrip.png">
+            <button>Download Your Photo Strip</button>
+        </a>
+    </body>
+</html>

@@ -61,7 +61,14 @@
                 font-family: 'Dogica';
                 font-size: 15px;
                 color: #808080;
-                margin-bottom: 70px;
+                margin-bottom: 30px;
+            }
+
+            .signatureimg {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 150px;
             }
 
             /* button definitions */
@@ -105,6 +112,27 @@
                 transform: scale(1.1) rotate(-5deg);
             }
 
+            #camera {
+                width: 600px;
+                height: 450px;
+                border: 2px solid #84A59D;
+                border-radius: 10px;
+                display: block;
+                margin-left: 300px;
+                object-fit: cover;
+
+                transform: scaleX(-1);
+            }
+
+            #countDown {
+                position: absolute;
+                margin-left: 575px;
+                margin-top: 200px;
+                
+                font-family: "Cotton Cloud";
+                font-size: 50px;
+                color: #F7EDE2;
+            }
         </style>
         <script>
             // switching to frame selection
@@ -117,6 +145,84 @@
                 document.getElementById(current).style.display = 'none';
                 document.getElementById("theme").style.display = 'flex';
             }
+
+            // to save frame number in global variable
+            let selectedFrameNumber = null;
+
+            // open camera
+            async function startCamera(current, number) {
+                document.getElementById(current).style.display = 'none';
+                document.getElementById("cameraPage").style.display = 'flex';
+                selectedFrameNumber = number;
+
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    const videoElement = document.getElementById('camera');
+                    videoElement.srcObject = stream;
+                } catch (err) {
+                    console.error("Error accessing the camera:", err);
+                    alert("Camera access was denied or not supported.");
+                }
+            }
+
+            // initiates countdown
+            function startCountdown(seconds = 3) {
+                const countdown1 = document.getElementById('countDown');
+                countdown1.textContent = seconds;
+                countdown1.style.display = 'block';
+
+                const interval = setInterval(() => {
+                    seconds--;
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        countdown1.textContent = '';
+                        capturePhoto();
+                    } else {
+                        countdown1.textContent = seconds;
+                    }
+                }, 1000);
+            }
+
+            // capturing and saving photos - limits photos to 4
+            let photoCount = 0;
+            function capturePhoto() {
+                const video = document.getElementById('camera');
+                const canvas = document.getElementById('photoCanvas');
+                const context = canvas.getContext('2d');
+
+                // mirroring final image
+                context.save(); 
+                context.translate(canvas.width, 0); 
+                context.scale(-1, 1); 
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                context.restore();
+
+                // assigning id and saving to local storage for later acccess
+                const photoDataUrl = canvas.toDataURL('image/png');
+                localStorage.setItem('photo' + photoCount, photoDataUrl);
+
+                const img = document.createElement('img');
+                img.src = photoDataUrl;
+                img.style.height = '100px';
+                img.style.border = '2px solid #84A59D';
+                img.style.borderRadius = '8px';
+
+                document.getElementById('photoGallery').appendChild(img);
+                photoCount++;
+
+                if (photoCount === 4) {
+                    localStorage.setItem('selectedFrame', selectedFrameNumber);
+                    setTimeout(() => {
+                        window.location.href = 'nextpage.html'; 
+                    }, 1000);
+                }
+            }
+
+            document.addEventListener('keydown', (event) => {
+                if (event.code === "Space") {
+                    startCountdown(3);
+                }
+            });
         </script>
     </head>
 
@@ -146,8 +252,15 @@
             </button>
         </div>
 
+        <img class="signatureimg" src="images/signature.png"/>
+
+
         <!--choose your haikyuu frame button set-->
         <div class="button_container" id="haikyuu" style="display: none;">
+            <button class="image_button">
+                <img class="button_image_frame" src="1.png" onclick="startCamera('haikyuu', 1)"/>
+                Kuroo
+            </button>
             <!-- back button -->
             <button class="image_button" onclick="backToTheme('haikyuu')">&lt;</button>
         </div>
@@ -155,27 +268,28 @@
         <!--choose your sanrio frame button set-->
         <div class="button_container" id="sanrio" style="display: none;">
             <button class="image_button">
-                <img class="button_image_frame" src="melody.png"/>
+                <img class="button_image_frame" src="6.png" onclick="startCamera('sanrio', 6)"/>
                 My Melody
             </button>
             <button class="image_button">
-                <img class="button_image_frame" src="kuromi.png"/>
+                <img class="button_image_frame" src="7.png"/>
                 Kuromi
             </button>
             <button class="image_button">
-                <img class="button_image_frame" src="ponchacco.png"/>
+                <img class="button_image_frame" src="8.png"/>
                 Ponchacco
             </button>
 
             <!--back button-->
             <button class="image_button" onclick="backToTheme('sanrio')">&lt;</button>
+
         </div>
 
         <!--choose your simple frame button set-->
         <div class="button_container" id="simple" style="display: none;">
             <button class="image_button">
-                <img class="button_image_frame" src="ghost.png"/>
-                My Melody
+                <img class="button_image_frame" src="11.png"/>
+                Ghost
             </button>
 
             <!--back button-->
@@ -187,6 +301,17 @@
 
             <!--back button-->
             <button class="image_button" onclick="backToTheme('other')">&lt;</button>
+        </div>
+
+        <!--camera page-->
+        <div id="cameraPage" style="display: none; position: relative; width: 600px;">
+            <video id="camera" autoplay playsinline></video>
+            <div id="countDown"></div>
+
+            <canvas id="photoCanvas" width="600" height="450" style="display: none;"></canvas>
+            <div id="photoGallery" style="display: flex; flex-direction: column; gap: 10px; margin-left: 15px;"></div>
+
+            <h3>click space bar to take photo</h3>
         </div>
     </body>
 </html>
