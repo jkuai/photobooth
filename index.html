@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://www.behance.net/gallery/200099205/Milky-Vintage-Stylish-Retro-Serif/modules/1134199513" rel="stylesheet">
+
+        <title>photobooth ᡣ𐭩 •｡ꪆৎ ˚</title>
+
+        <script src="script.js"></script>
+
+        <style>
+            /* fonts */
+            @font-face {
+                font-family: 'Alice Smile';
+                src: url('fonts/Alice Smile.ttf') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'Cotton Cloud';
+                src: url('fonts/Cotton Cloud.ttf') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'Dogica';
+                src: url('fonts/dogicapixel.ttf') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'Cute Notes';
+                src: url('fonts/Cute Notes.ttf') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            /* other design features*/
+            body {
+                background-color: #F7EDE2;
+                background-repeat: no-repeat;
+                background-size: cover;
+                text-align: center;
+            }
+
+            h1 {
+                font-family: 'Alice Smile';
+                font-size: 50px;
+                color: #84A59D;
+                margin-bottom: -15px;
+            }
+
+            h2 {
+                font-family: 'Cotton Cloud';
+                font-size: 60px;
+                color: #84A59D;
+                margin-top: 0px;
+                margin-bottom: 20px;
+            }
+
+            h3 {
+                font-family: 'Dogica';
+                font-size: 15px;
+                color: #808080;
+                margin-bottom: 70px;
+            }
+
+            /* button definitions */
+            .button_container {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                margin-top: 10px;
+            }
+
+            .image_button {
+                font-family: 'Cute Notes';
+                font-size: 30px;
+                color: #F6BD60;
+
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+
+            .button_image {
+                width: 200px;
+                height: 170px;
+                transition: transform 0.3s ease; 
+            }
+
+            .button_image_frame {
+                width: 100px;
+                transition: transform 0.3s ease
+            }
+
+            .image_button:hover .button_image { 
+                transform: scale(1.1) rotate(5deg);
+            }
+
+            .image_button:hover .button_image_frame { 
+                transform: scale(1.1) rotate(-5deg);
+            }
+
+        </style>
+        <script>
+            // switching to frame selection
+            function switchToFrame(theme) {
+                document.getElementById("theme").style.display = 'none';
+                document.getElementById(theme).style.display = 'flex'; 
+            }
+            // going back to theme selection
+            function backToTheme(current) {
+                document.getElementById(current).style.display = 'none';
+                document.getElementById("theme").style.display = 'flex';
+            }
+        </script>
+    </head>
+
+    <body>
+        <!--main page texts-->
+        <h1>photo</h1>
+        <h2>booth</h2>
+        <h3>whats the vision for today? ⋆˚࿔</h3>
+        `
+        <!--choose your theme button set-->
+        <div class="button_container" id="theme">
+            <button class="image_button" onclick="switchToFrame('haikyuu')">
+                <img  class="button_image" src="oikawahead.png"/>
+                haikyuu
+            </button>
+            <button class="image_button" onclick="switchToFrame('sanrio')">
+                <img  class="button_image" src="ponchaco.png"/>
+                sanrio
+            </button>
+            <button class="image_button" onclick="switchToFrame('simple')">
+                <img  class="button_image" src="simple.png"/>
+                simple
+            </button>
+            <button class="image_button" onclick="switchToFrame('other')">
+                <img  class="button_image" src="other.png"/>
+                other
+            </button>
+        </div>
+
+        <!--choose your haikyuu frame button set-->
+        <div class="button_container" id="haikyuu" style="display: none;">
+            <!-- back button -->
+            <button class="image_button" onclick="backToTheme('haikyuu')">&lt;</button>
+        </div>
+
+        <!--choose your sanrio frame button set-->
+        <div class="button_container" id="sanrio" style="display: none;">
+            <button class="image_button">
+                <img class="button_image_frame" src="melody.png"/>
+                My Melody
+            </button>
+            <button class="image_button">
+                <img class="button_image_frame" src="kuromi.png"/>
+                Kuromi
+            </button>
+            <button class="image_button">
+                <img class="button_image_frame" src="ponchacco.png"/>
+                Ponchacco
+            </button>
+
+            <!--back button-->
+            <button class="image_button" onclick="backToTheme('sanrio')">&lt;</button>
+        </div>
+
+        <!--choose your simple frame button set-->
+        <div class="button_container" id="simple" style="display: none;">
+            <button class="image_button">
+                <img class="button_image_frame" src="ghost.png"/>
+                My Melody
+            </button>
+
+            <!--back button-->
+            <button class="image_button" onclick="backToTheme('simple')">&lt;</button>
+        </div>
+
+        <!--choose your other frame button set-->
+        <div class="button_container" id="other" style="display: none;">
+
+            <!--back button-->
+            <button class="image_button" onclick="backToTheme('other')">&lt;</button>
+        </div>
+    </body>
+</html>
