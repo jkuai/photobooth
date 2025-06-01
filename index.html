@@ -150,10 +150,10 @@
             let selectedFrameNumber = null;
 
             // open camera
-            async function startCamera(current, number) {
+            async function startCamera(current, frameName) {
                 document.getElementById(current).style.display = 'none';
                 document.getElementById("cameraPage").style.display = 'flex';
-                selectedFrameNumber = number;
+                selectedFrameNumber = frameName;
 
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -258,7 +258,7 @@
         <!--choose your haikyuu frame button set-->
         <div class="button_container" id="haikyuu" style="display: none;">
             <button class="image_button">
-                <img class="button_image_frame" src="1.png" onclick="startCamera('haikyuu', 1)"/>
+                <img class="button_image_frame" src="frames/1.png" onclick="startCamera('haikyuu', '1.png')"/>
                 Kuroo
             </button>
             <!-- back button -->
@@ -268,11 +268,11 @@
         <!--choose your sanrio frame button set-->
         <div class="button_container" id="sanrio" style="display: none;">
             <button class="image_button">
-                <img class="button_image_frame" src="6.png" onclick="startCamera('sanrio', 6)"/>
+                <img class="button_image_frame" src="frames/6.png" onclick="startCamera('sanrio', '6.png')"/>
                 My Melody
             </button>
             <button class="image_button">
-                <img class="button_image_frame" src="7.png"/>
+                <img class="button_image_frame" src="frames/7.png"/>
                 Kuromi
             </button>
             <button class="image_button">
@@ -288,7 +288,7 @@
         <!--choose your simple frame button set-->
         <div class="button_container" id="simple" style="display: none;">
             <button class="image_button">
-                <img class="button_image_frame" src="11.png"/>
+                <img class="button_image_frame" src="frames/11.png"/>
                 Ghost
             </button>
 
