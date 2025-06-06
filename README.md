@@ -7,9 +7,11 @@ This project is a gift for my friend, who is obssessed with both taking photos a
 (from google fonts)
 
 ## colour palette 🎀
-- #542344
-- #BFD1E5 
-- #EBF5EE
-- #D8BFAA
-- #808080
+- #F6BD60 : Hunyadi yellow
+- #F7EDE2 : Linen
+- #F5CAC3 : Tea rose
+- #84A59D : Cambridge blue
+- #F28482 : light coral
+- #808080 : idk
 (from coolors.co)
+

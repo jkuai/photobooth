@@ -79,6 +79,13 @@
                 margin-top: 10px;
             }
 
+            .flicker-img {
+                width: 200px;
+                background: none;
+                border: none;
+                cursor: pointer; 
+            }
+
             .image_button {
                 font-family: 'Cute Notes';
                 font-size: 30px;
@@ -145,6 +152,19 @@
                 document.getElementById(current).style.display = 'none';
                 document.getElementById("theme").style.display = 'flex';
             }
+
+            // flicker photobooth animation
+            window.addEventListener("DOMContentLoaded", () => {
+                const flickers = document.querySelectorAll('.flicker-img');
+            
+                flickers.forEach(img => {
+                    let showingFrame1 = true;
+                    setInterval(() => {
+                    img.src = showingFrame1 ? img.dataset.frame2 : img.dataset.frame1;
+                    showingFrame1 = !showingFrame1;
+                    }, 300); // 300ms flicker rate
+                });
+            });
 
             // to save frame number in global variable
             let selectedFrameNumber = null;
@@ -231,9 +251,17 @@
         <h1>photo</h1>
         <h2>booth</h2>
         <h3>whats the vision for today? ⋆˚࿔</h3>
+
+        <!--start page with photobooth-->
+        <div class="button_container" id="startPage"?>
+            <button class="image_button" onclick="backToTheme('startPage')">
+                <img src="images/booth.png" class="flicker-img" data-frame1="images/booth.png" data-frame2="images/booth2.png"/>
+                click booth to enter!
+            </button>
+        </div>
         `
         <!--choose your theme button set-->
-        <div class="button_container" id="theme">
+        <div class="button_container" id="theme" style="display: none;">
             <button class="image_button" onclick="switchToFrame('haikyuu')">
                 <img  class="button_image" src="oikawahead.png"/>
                 haikyuu
@@ -261,6 +289,14 @@
                 <img class="button_image_frame" src="frames/1.png" onclick="startCamera('haikyuu', '1.png')"/>
                 Kuroo
             </button>
+            <button class="image_button">
+                <img class="button_image_frame" src="frames/2.png" onclick="startCamera('haikyuu', '2.png')"/>
+                Bokuto
+            </button>
+            <button class="image_button">
+                <img class="button_image_frame" src="frames/3.png" onclick="startCamera('haikyuu', '3.png')"/>
+                Tendou
+            </button>
             <!-- back button -->
             <button class="image_button" onclick="backToTheme('haikyuu')">&lt;</button>
         </div>
@@ -272,14 +308,10 @@
                 My Melody
             </button>
             <button class="image_button">
-                <img class="button_image_frame" src="frames/7.png"/>
+                <img class="button_image_frame" src="frames/7.png" onclick="startCamera('sanrio', '7.png')"/>
                 Kuromi
             </button>
-            <button class="image_button">
-                <img class="button_image_frame" src="8.png"/>
-                Ponchacco
-            </button>
-
+            
             <!--back button-->
             <button class="image_button" onclick="backToTheme('sanrio')">&lt;</button>
 
@@ -288,8 +320,12 @@
         <!--choose your simple frame button set-->
         <div class="button_container" id="simple" style="display: none;">
             <button class="image_button">
-                <img class="button_image_frame" src="frames/11.png"/>
+                <img class="button_image_frame" src="frames/11.png" onclick="startCamera('simple', '11.png')"/>
                 Ghost
+            </button>
+            <button class="image_button">
+                <img class="button_image_frame" src="frames/12.png" onclick="startCamera('simple', '12.png')"/>
+                Yellow
             </button>
 
             <!--back button-->

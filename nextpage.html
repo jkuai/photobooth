@@ -28,11 +28,14 @@
                 font-style: normal;
             }
 
+            /* other design features*/
             body {
                 background-color: #F7EDE2;
                 background-repeat: no-repeat;
                 background-size: cover;
                 text-align: center;
+                justify-content: center;
+                align-items: center;
             }
 
             h1 {
@@ -57,85 +60,74 @@
                 margin-bottom: 30px;
             }
 
-            #finalStripPreview {
-                width: 200px;
+            .preview_img {
+                width: 100px;
                 height: auto;
-                margin-top: 20px;
             }
+
+            
         </style>
         <script>
+            document.addEventListener("DOMContentLoaded", buildPhotoStrip);
+
             function buildPhotoStrip() {
                 const canvas = document.getElementById('finalCanvas');
                 const ctx = canvas.getContext('2d');
+                const selectedFrame = localStorage.getItem('selectedFrame');
                 const preview = document.getElementById('finalStripPreview');
                 const downloadLink = document.getElementById('downloadLink');
 
-                // Frame handling
-                let selectedFrame = localStorage.getItem('selectedFrame');
                 if (!selectedFrame) {
-                    alert("Missing frame image. Please take your photos again.");
+                    alert("No frame selected!");
                     return;
                 }
 
-                // Load frame image
                 const frameImage = new Image();
-                frameImage.crossOrigin = "anonymous";
                 frameImage.src = 'frames/' + selectedFrame;
-                frameImage.onload = () => {
-                    const photos = [];
-                    let missingPhoto = false;
-                    for (let i = 0; i < 4; i++) {
-                        const photoData = localStorage.getItem('photo' + i);
-                        if (!photoData) {
-                            alert("Missing photo " + (i+1) + ". Please take your photos again.");
-                            missingPhoto = true;
-                            break;
-                        }
-                        const img = new Image();
-                        img.crossOrigin = "anonymous";
-                        img.src = photoData;
-                        photos.push(img);
+
+                const photos = [];
+                for (let i = 0; i < 4; i++) {
+                    const photoData = localStorage.getItem('photo' + i);
+                    if (!photoData) {
+                        alert("Missing photo " + (i + 1));
+                        return;
                     }
-                    if (missingPhoto) return;
+                    const img = new Image();
+                    img.src = photoData;
+                    photos.push(img);
+                }
 
-                    Promise.all(photos.map(img => new Promise((res, rej) => {
-                        img.onload = res;
-                        img.onerror = () => rej(new Error("Failed to load a photo image."));
-                    })))
+                Promise.all(photos.map(img => new Promise(res => img.onload = res)))
                     .then(() => {
-                        // Draw photos
-                        for (let i = 0; i < 4; i++) {
-                            ctx.drawImage(photos[i], 0, i * 459, 600, 450);
-                        }
-                        // Draw frame
-                        ctx.drawImage(frameImage, 0, 0, 600, 1800);
+                        frameImage.onload = () => {
+                            for (let i = 0; i < 4; i++) {
+                                ctx.drawImage(photos[i], 0, i * 459, 600, 450);
+                            }
+                            ctx.drawImage(frameImage, 0, 0, 600, 1800);
 
-                        // Show preview and download
-                        const finalURL = canvas.toDataURL('image/png');
-                        preview.src = finalURL;
-                        preview.alt = "Final photostrip preview";
-                        preview.style.display = 'block';
-                        downloadLink.href = finalURL;
-
-                        localStorage.clear();
-                    })
-                    .catch((err) => { alert(err.message); });
-                };
-                frameImage.onerror = function() {
-                    alert("Failed to load frame image. Please check if the frame image exists in the frames/ folder.");
-                };
+                            const finalURL = canvas.toDataURL('images/png');
+                            preview.src = finalURL;
+                            preview.style.display = 'block';
+                            downloadLink.href = finalURL;
+                        };
+                        frameImage.onerror = () => {
+                            alert("Failed to load frame image.");
+                        };
+                    });
             }
-
-            window.onload = buildPhotoStrip;
         </script>
     </head>
     <body>
         <h3>thank you for using this</h3>
         <h1>photo</h1>
         <h2>booth</h2>
-        <h3>here are your photos ᡣ𐭩 •｡ꪆৎ ˚</h3>
-        <img id="finalStripPreview" style="display: none;" alt="Final photostrip preview" />
+
+        <h3>here are your photos!</h3>
+
         <canvas id="finalCanvas" width="600" height="1800" style="display: none;"></canvas>
+        <img class="preview_img" id="finalStripPreview" alt="Final photostrip preview"/>
+        <br>
+        <!-- Download button -->
         <a id="downloadLink" download="photostrip.png">
             <button>Download Your Photo Strip</button>
         </a>
