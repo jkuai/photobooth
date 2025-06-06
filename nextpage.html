@@ -69,22 +69,24 @@
         </style>
         <script>
             document.addEventListener("DOMContentLoaded", buildPhotoStrip);
-
+            
             function buildPhotoStrip() {
                 const canvas = document.getElementById('finalCanvas');
                 const ctx = canvas.getContext('2d');
                 const selectedFrame = localStorage.getItem('selectedFrame');
                 const preview = document.getElementById('finalStripPreview');
                 const downloadLink = document.getElementById('downloadLink');
-
+            
                 if (!selectedFrame) {
                     alert("No frame selected!");
                     return;
                 }
-
+            
+                // Load frame image
                 const frameImage = new Image();
                 frameImage.src = 'frames/' + selectedFrame;
-
+            
+                // Load photo images
                 const photos = [];
                 for (let i = 0; i < 4; i++) {
                     const photoData = localStorage.getItem('photo' + i);
@@ -96,23 +98,32 @@
                     img.src = photoData;
                     photos.push(img);
                 }
-
-                Promise.all(photos.map(img => new Promise(res => img.onload = res)))
-                    .then(() => {
-                        frameImage.onload = () => {
-                            for (let i = 0; i < 4; i++) {
-                                ctx.drawImage(photos[i], 0, i * 459, 600, 450);
-                            }
-                            ctx.drawImage(frameImage, 0, 0, 600, 1800);
-
-                            const finalURL = canvas.toDataURL('images/png');
-                            preview.src = finalURL;
-                            preview.style.display = 'block';
-                            downloadLink.href = finalURL;
-                        };
-                        frameImage.onerror = () => {
-                            alert("Failed to load frame image.");
-                        };
+            
+                // Helper to wrap image loading in a Promise with error handling
+                function loadImage(img) {
+                    return new Promise((resolve, reject) => {
+                        img.onload = () => resolve(img);
+                        img.onerror = () => reject(new Error("Failed to load image: " + img.src));
+                    });
+                }
+            
+                // Wait for all photos AND the frame to load
+                Promise.all([...photos, frameImage].map(loadImage))
+                    .then((loadedImages) => {
+                        // Draw photos
+                        for (let i = 0; i < 4; i++) {
+                            ctx.drawImage(photos[i], 0, i * 459, 600, 450);
+                        }
+                        // Draw frame
+                        ctx.drawImage(frameImage, 0, 0, 600, 1800);
+            
+                        const finalURL = canvas.toDataURL('image/png');
+                        preview.src = finalURL;
+                        preview.style.display = 'block';
+                        downloadLink.href = finalURL;
+                    })
+                    .catch((err) => {
+                        alert(err.message);
                     });
             }
         </script>
