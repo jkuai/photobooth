@@ -1,17 +1,26 @@
 # photobooth ᡣ𐭩 •｡ꪆৎ ˚
 
-This project is a gift for my friend, who is obssessed with both taking photos and haikyuu characters. The goal is to create an application that accesses the device camera, allowing users to select how many pictures they want, and peice the final images into photobooth printout, with border options.
+A custom web-based interface build with HTML, JavaScript and CSS.
+This project was created as a personal gift for my friend's 20th birthday, designed with her favourite characters in mind. I hope that she enjoys this project as much as I enjoyed creating it, and is able to capture her favourite moments through the lenses of this Photobooth.
+
+## features 👀
+- interactive opening page where you can enter the photobooth
+- photostrip theme selection page with choices of Haikyuu, Sanrio, Simple, and Other popular character frames
+- using the device camera, captures 4 pictures at the press of the space bar (easy for the user to control)
+- displays your finished photostrip, allowing users to download the final product
+
+- ✨ cute and clean interface using cutom fonts and hand-drawn visual elements
+- 🍓 image button animations for dynamic interaction
+- 🌃 fully web-based and usable across all devices
 
 ## font 🍒
-- Cherry Bomb One
-(from google fonts)
+- Alice Smile
+- Cotton Cloud
+- Cute Notes
+- Dogica Pixel
+(downloaded from dafont.com)
 
-## colour palette 🎀
-- #F6BD60 : Hunyadi yellow
-- #F7EDE2 : Linen
-- #F5CAC3 : Tea rose
-- #84A59D : Cambridge blue
-- #F28482 : light coral
-- #808080 : idk
-(from coolors.co)
+## Try it out 🪄
+- take some photos at:
+  https://jkuai.github.io/photobooth/ 
 
